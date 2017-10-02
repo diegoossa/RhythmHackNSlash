@@ -1,7 +1,7 @@
 ﻿using com.ootii.Messages;
 using UnityEngine;
 
-namespace GrupoDeInteres.HackNSlash.Game
+namespace BonusLevel.HackNSlash.Game
 {
     public class OtherClass : MonoBehaviour
     {
