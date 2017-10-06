@@ -11,6 +11,8 @@ namespace BonusLevel.HackNSlash.Game
 
         [Space(10)]
         [Header("Reference positions")]
+		public Transform player;
+
         public Transform leftSpawn;
         public Transform rightSpawn;
         public Transform leftTarget;
@@ -44,8 +46,8 @@ namespace BonusLevel.HackNSlash.Game
             //Cache position of the Transform, because we don't need the Transform itself
             leftSpawnPosition = leftSpawn.position;
             rightSpawnPosition = rightSpawn.position;
-            leftTargetPosition = leftTarget.position;
-            rightTargetPosition = rightTarget.position;
+			leftTargetPosition = new Vector2(leftTarget.position.x+0.5f,leftTarget.position.y);
+			rightTargetPosition = new Vector2 (rightTarget.position.x+0.5f,rightTarget.position.y);
 
             //Some calculations
             enemySpeed = 60 / GameController.Instance.bpm;
@@ -69,7 +71,7 @@ namespace BonusLevel.HackNSlash.Game
         public void Spawn(IMessage message)
         {
             Enemy currentEnemy = Instantiate(enemy, leftSpawnPosition, Quaternion.identity).GetComponent<Enemy>();
-            currentEnemy.Init(leftTargetPosition, timeToTarget);
+			currentEnemy.Init(leftTargetPosition, timeToTarget);
             currentEnemies.Add(currentEnemy);
         }
 
@@ -79,12 +81,14 @@ namespace BonusLevel.HackNSlash.Game
                 return;
             float distance = leftTarget.transform.position.x - currentEnemies[0].gameObject.transform.position.x;
 
-            if(distance >0 && distance<0.5)
+            if(distance >= -0.5 && distance <= 0.5)
             {
-                if (distance <= 0.5 && distance >= 0.2)
-                    Debug.Log("perfect");
-                else
-                    Debug.Log("good");
+				if (distance <= 0.5 && distance >= 0.2)
+					Debug.Log ("perfect");
+				else if (distance <= 0.2 && distance >= 0.5)
+					Debug.Log ("good");
+				else
+					Debug.Log ("Bad");
                 currentEnemies[0].DestroyEnemy();
                 currentEnemies.RemoveAt(0);
             }
