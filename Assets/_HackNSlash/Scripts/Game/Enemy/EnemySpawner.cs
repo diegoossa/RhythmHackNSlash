@@ -27,6 +27,8 @@ namespace BonusLevel.HackNSlash.Game
 
         private List<Enemy> currentEnemies;
 
+        private float perfectArea;
+
         private void Start()
         {
             Init();
@@ -47,6 +49,7 @@ namespace BonusLevel.HackNSlash.Game
 
             //Some calculations
             enemySpeed = 60 / GameController.Instance.bpm;
+            perfectArea = leftTarget.GetComponent<BoxCollider2D>().size.y;
             //Debug.Log("Enemy Speed : " + enemySpeed);
             float distance = GameController.Instance.distance;
             //Vector2.Distance(leftSpawnPosition, leftTargetPosition);
@@ -59,6 +62,10 @@ namespace BonusLevel.HackNSlash.Game
         //    InvokeRepeating("Spawn", enemySpeed, enemySpeed);
         //}
 
+        private void Update()
+        {
+        }
+
         public void Spawn(IMessage message)
         {
             Enemy currentEnemy = Instantiate(enemy, leftSpawnPosition, Quaternion.identity).GetComponent<Enemy>();
@@ -70,9 +77,18 @@ namespace BonusLevel.HackNSlash.Game
         {
             if (currentEnemies.Count <= 0)
                 return;
+            float distance = leftTarget.transform.position.x - currentEnemies[0].gameObject.transform.position.x;
 
-            currentEnemies[0].DestroyEnemy();
-            currentEnemies.RemoveAt(0);
+            if(distance >0 && distance<0.5)
+            {
+                if (distance <= 0.5 && distance >= 0.2)
+                    Debug.Log("perfect");
+                else
+                    Debug.Log("good");
+                currentEnemies[0].DestroyEnemy();
+                currentEnemies.RemoveAt(0);
+            }
+            
         }
     }
 }
